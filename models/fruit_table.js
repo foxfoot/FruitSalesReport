@@ -45,34 +45,15 @@ fruit_table.sync({force : true})
 
 async function query(name){
     console.log("query the DB, name:" + name);
-    if(name === undefined){
-        return await fruit_table.findAll({
-            order : [
-                ['id', 'DESC']
-            ]
-        });
-    }else{
-        return await fruit_table.findAll({
-            where : {
-                name : name,
-                '$not' : [
-                    {'id' : null}
-                ]
-            }
-        })
-    }
-}
-
-async function count(name){
-    if(name===undefined){
-        return 0;
-    }
-
-    return await fruit_table.count({
+    const qryObj = name === undefined ?  {} : {
         where : {
-            name : name
+            name : name,
+            '$not' : [
+                {'id' : null}
+            ]
         }
-    });
+    };
+    return await fruit_table.findAll(qryObj);
 }
 
 async function add(params){
@@ -127,36 +108,15 @@ async function deleteFruit(params){
             where : params,
             returning : true
         }
-    ).catch(e=>{
-            console.log("delete error: " + e);
-        }
-    );
+    ).catch(e => console.log("delete error: " + e));
 
     console.log(res);
     return res>0; // number of rows effected
 }
 
-var getIDFromName = async function(name){
-    if(name === undefined){
-        console.log("getIDFromName: input name is undefined.");
-        return;
-    }
-
-    let res_id = await fruit_table.findOne({
-        where : {
-            name : name
-        },
-        attributes : ['id']
-    });
-
-    return res_id;
-}
-
 module.exports = {
     query,
     add,
-    count,
     modify,
-    deleteFruit,
-    getIDFromName
+    deleteFruit
 };

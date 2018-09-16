@@ -1,15 +1,21 @@
 const fruitHandler = require("../../controller/webapi/fruitHandler");
 const express = require('express');
 const router = express.Router();
+const Joi = require('joi')
 
 router.get("/fruit", async (req, res) => {
     console.log('fruit Router')
-    try{
-        const fruitList =  await fruitHandler.get(req.query.name);
-        return res.json(fruitList);
-    }catch(e){
-        return res.status(406).send("Unable to get fruit list.");
+    const schema = Joi.object().keys({
+        name : Joi.string().alphanum().min(1).max(30).optional() //only accept name [1,30]
+      });
+    
+    const {error} = Joi.validate(req.query, schema);
+    if(error){
+        res.status(400).send('Invalid parameter. Error: ' + error.details[0].message);
+        return;
     }
+
+    return await fruitHandler.get(req.query.name, res);
 });
 
 /*
@@ -64,7 +70,7 @@ router.get("/fruit", async (req, res) => {
         path : "/fruit",
         handler : async (request, h) => {
             try{
-                if(await fruitHandler.deleteFruit(request.query)){
+                if(await fruitHandler.delete(request.query)){
                     return h.response("Success").code(200);
                 }else{
                     return h.response("Failed to delete").code(505);

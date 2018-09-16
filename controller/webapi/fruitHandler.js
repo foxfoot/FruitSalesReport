@@ -2,24 +2,15 @@
 
 var fruit_table = require('../../models/fruit_table');
 
-async function get(name){
+async function get(name, res){
     console.log(__dirname + "/" + __filename + " get()");
 
-    return await fruit_table.query(name);
-}
-
-function getPrice(name){
-    if(name===undefined){
-        throw new Error("Wrong name");
+    try{
+        const fruitList =  await fruit_table.query(name);
+        return res.json(fruitList);
+    }catch(e){
+        return res.status(406).send("Unable to get fruit list. " + e);
     }
-
-    for(let f of fruitsData){
-        if(f.name === name){
-            return f.price;
-        }
-    }
-
-    return null;
 }
 
 async function add(params){
@@ -52,8 +43,7 @@ var deleteFruit = async params => {
 }
 
 module.exports = {
-    getPrice : getPrice,
-    get : get,
+    get,
     add,
     modify,
     deleteFruit
