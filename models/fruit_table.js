@@ -59,11 +59,11 @@ async function query(name){
 async function add(params){
     console.log("Add into the DB");
     if(params===undefined){
-        return false;
+        return {};
     }
 
-    params.price = params.price ? parseFloat(params.price) : null;
-
+    //params.price = params.price ? parseFloat(params.price) : null;
+    params.color = params.color || "unknown";
     /*await fruit_table.create({
         id : Date.now(),
         name : params.name,
@@ -75,42 +75,47 @@ async function add(params){
     return res;
 }
 
-async function modify(params){
+/*
+ * @return true -- if succeeded; false -- if failed
+ */
+async function modify(name, params){
     console.log("modify ");
-    if(params===undefined || params.name === undefined){
+    if(params===undefined || name === undefined){
         return false;
     }
 
-    let res = await fruit_table.update(  
+    const res = await fruit_table.update(  
         params,  //value
         {        //options
-            where : {name : params.name},
+            where : {name : name},
             returning: true  // return result
             /*,
             plain: true*/
         }).catch(e=>{
-                console.log("modify exception: " + e);
+                console.log("Modify exception: " + e);
             }
         );
 
-    console.log(res);
-    return res[1] > 0; // number of rows effected
+    //console.log(res.get({'plain': true}));
+    return res.length>0; // number of rows effected
 }
 
-async function deleteFruit(params){
+async function deleteFruit(name){
     console.log("deleting");
-    if(params===undefined || params.name === undefined){
+    if(name === undefined){
         return false;
     }
 
     let res = await fruit_table.destroy(
         {
-            where : params,
+            where : {
+                name : name
+            },
             returning : true
         }
     ).catch(e => console.log("delete error: " + e));
 
-    console.log(res);
+    //console.log(res);
     return res>0; // number of rows effected
 }
 
