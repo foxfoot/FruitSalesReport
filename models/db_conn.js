@@ -1,13 +1,6 @@
 const Sequelize = require('sequelize');
 
-var connection = {
-    dbType : 'mysql',
-    database : "test_js",
-    username : "root",
-    password : "Root000",
-    host : "127.0.0.1",
-    port : 3306
-};
+const connection = require('./connPasswd.json')
 
 var sequelize = new Sequelize(
     connection.database,
