@@ -14,9 +14,9 @@ var order_table =  dbConn.define(
     },
     {
         freezeTableName : true,
-        createdAt : false,
+        createdAt : true,
         updatedAt : false,
-        timestamps : false
+        timestamps : true
     }
 );
 

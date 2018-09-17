@@ -1,6 +1,26 @@
-/*const orderHandler = require('../controller/webapi/orderHandler');
+const express = require('express');
+const router = express.Router();
+const Joi = require('joi');
+const orderHandler = require('../../controller/webapi/orderHandler');
 
-module.exports = [
+router.post('/order', async (req, res) =>{
+/* TODO   console.log('fruit router post')
+    const schema = Joi.object().keys({
+        name : Joi.string().alphanum().min(1).max(30).required(),
+        price : Joi.number().min(0.01).required(),
+        color : Joi.string().regex(/^[a-zA-Z]+$/).optional()
+      });
+    
+    const {error} = Joi.validate(req.body, schema);
+    if(error){
+        res.status(400).send('Invalid parameter. Error: ' + error.details[0].message);
+        return;
+    }
+*/
+    return await orderHandler.add(req.body, res);
+})
+
+/*module.exports = [
     {
         method : 'POST',
         path : "/order",
@@ -32,3 +52,5 @@ module.exports = [
         }
     }
 ];*/
+
+module.exports = router;

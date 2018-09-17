@@ -7,9 +7,11 @@ var fruit_table = require('../../models/fruit_table');
 //order_table.order_table.belongsToMany(fruit_table.fruit_table, {through : 'FruitOrder'});
 
 async function add(params){
-    console.log("orderHandler.add()");
+    console.log("orderHandler.add() + size=" + params.order.length);
+    params.order.forEach(v => console.log("fruit=" + v.fruit + ", amount=" + v.amount));
+return;//TODO
     //convert the fruit name to fruit id
-    if(params.fruit_name === undefined){
+    if(params.name === undefined){
         throw Error('Unable to fetch the fruit name from query parameters.');
         return;
     }

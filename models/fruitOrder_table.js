@@ -8,8 +8,8 @@ var fruitOrder_table = db_conn.define('fruitOrder',
         fruitId : Sequelize.INTEGER
     },
     {  //options
-        timestamp : false,
-        createdAt: false,
+        timestamp : true,
+        createdAt: true,
         updatedAt: false,
         freezeTableName: true  //do not change the table name
     }

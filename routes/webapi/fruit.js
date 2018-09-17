@@ -1,7 +1,8 @@
-const fruitHandler = require("../../controller/webapi/fruitHandler");
 const express = require('express');
 const router = express.Router();
-const Joi = require('joi')
+const Joi = require('joi');
+
+const fruitHandler = require("../../controller/webapi/fruitHandler");
 
 router.get("/fruit", async (req, res) => {
     console.log('fruit router get')

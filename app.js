@@ -7,9 +7,9 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
-var fruitRouter = require('./routes/webapi/fruit');
-//var orderRouter = require('./routes/webapi/order');
-//TODO: var indexRouter = require('./routes/salesReport');
+const fruitRouter = require('./routes/webapi/fruit');
+const orderRouter = require('./routes/webapi/order');
+//TODO: const indexRouter = require('./routes/salesReport');
 
 
 var app = express();
@@ -27,7 +27,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/webapi', fruitRouter);
-//app.use('/webapi/order', usersRouter);
+app.use('/webapi', orderRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
