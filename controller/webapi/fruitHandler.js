@@ -1,5 +1,3 @@
-'use strict'
-
 var fruit_table = require('../../models/fruit_table');
 
 async function get(name, res){

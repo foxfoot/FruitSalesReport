@@ -4,12 +4,10 @@ const Sequelize = require('sequelize');
 var fruit_table = dbConn.define(
     'fruit',//DB name
     {  //columns definitions
-        id : {
-            type:Sequelize.INTEGER,
-            primaryKey : true,
-            autoIncrement: true
+        name : {
+            type: Sequelize.STRING(100),
+            primaryKey : true
         },
-        name : Sequelize.STRING(100),
         price : Sequelize.DECIMAL(10,2),
         color : Sequelize.STRING
     },
@@ -21,7 +19,7 @@ var fruit_table = dbConn.define(
     }
 );
 
-fruit_table.sync({force : true})
+fruit_table.sync(/*{force : true}*/)
     .then(function(){
     fruit_table.create({
        name : "apple",
