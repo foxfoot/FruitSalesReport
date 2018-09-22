@@ -6,13 +6,15 @@ const orderHandler = require('../../controller/webapi/orderHandler');
 router.post('/order', async (req, res) =>{
    console.log('fruit router post')
 
-   const objSchema = Joi.object().keys({
+   const objSchema = Joi.object().keys({   // the object level
         fruit: Joi.string().regex(/^[a-zA-Z]+$/).required(),
         amount: Joi.number().integer().min(1).required()
     });
 
+    // the object array level
     const arraySchema = Joi.array().items(objSchema).unique().required();
 
+    // the top level
     const allSchema = Joi.object().keys({
         order: arraySchema,
         customer: Joi.string().regex(/^[a-zA-Z]+$/).required()
@@ -41,7 +43,7 @@ router.get('/order', async (req, res) =>{
             return;
         }
     */
-        return await orderHandler.query(req.body, res);
+        return await orderHandler.query(req.query, res);
     })
 
 /*module.exports = [

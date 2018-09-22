@@ -23,7 +23,7 @@ order_table.hasMany(fruitOrder_table);  // must put before the sync()
 order_table.sync(/*{force : true}*/).then(()=>{
     console.log('order table sync succeed');
 
-    fruitOrder_table.sync({force : true})
+    fruitOrder_table.sync(/*{force : true}*/)
         .then(()=>{
             console.log('fruitOrder table sync succeeded')
         })
