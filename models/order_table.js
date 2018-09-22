@@ -109,7 +109,7 @@ async function generateSalesReport(params){
     let salesRes = {};
 
     const rawQuery = "select  \
-        count(distinct `order`.`id`) as orderCnt, \
+        count(distinct `order`.`id`) as order_count, \
         IFNULL(sum(`amount`), 0) as total_amount, \
         IFNULL(sum(`amount`*`unitPrice`), 0) as total_price, \
         '"+ params.start_date + "' as start_date, \

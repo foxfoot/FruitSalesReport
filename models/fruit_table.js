@@ -59,12 +59,6 @@ async function add(params){
 
     //params.price = params.price ? parseFloat(params.price) : null;
     params.color = params.color || "unknown";
-    /*await fruit_table.create({
-        id : Date.now(),
-        name : params.name,
-        price : params.price ? params.price : null,
-        color : params.color ? params.color : null
-    });*/
     let res = await fruit_table.create(params);
     console.log(res);
     return res;
