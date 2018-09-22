@@ -4,12 +4,19 @@ async function generateSalesReport(params, res){
     try{
         const result = await order_table.generateSalesReport(params)
         if(result){
-            res.status(200).send(result);
+            if(res){
+                res.status(200).send(result);
+            }
+            return true;
         }else{
-            res.status(401).send("Incorrect parameters.");
+            if(res){
+                res.status(401).send("Incorrect parameters.");
+            }
+            return false;
         }
     }catch(e){
         res.status(500).send(e);
+        return false;
     }
 }
 

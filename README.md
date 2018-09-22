@@ -15,6 +15,7 @@ npm install joi
 
 npm install joi-date-extensions
 
+npm install node-cron
 
 add a json file with the mysql connection information
 

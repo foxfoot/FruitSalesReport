@@ -11,6 +11,7 @@ const fruitRouter = require('./routes/webapi/fruit');
 const orderRouter = require('./routes/webapi/order');
 const salesReportRouter = require('./routes/webapi/salesReport');
 
+const salesReportCronJob = require('./controller/salesReportCronJob')
 
 var app = express();
 
@@ -45,5 +46,7 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+salesReportCronJob();
 
 module.exports = app;
