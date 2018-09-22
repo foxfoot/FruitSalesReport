@@ -5,7 +5,7 @@ var fruit_table = dbConn.define(
     'fruit',//DB name
     {  //columns definitions
         name : {
-            type: Sequelize.STRING(100),
+            type: Sequelize.STRING(64),
             primaryKey : true
         },
         price : Sequelize.DECIMAL(10,2),

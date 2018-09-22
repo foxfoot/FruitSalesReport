@@ -9,7 +9,7 @@ var usersRouter = require('./routes/users');
 
 const fruitRouter = require('./routes/webapi/fruit');
 const orderRouter = require('./routes/webapi/order');
-//TODO: const indexRouter = require('./routes/salesReport');
+const salesReportRouter = require('./routes/webapi/salesReport');
 
 
 var app = express();
@@ -28,6 +28,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/webapi', fruitRouter);
 app.use('/webapi', orderRouter);
+app.use('/webapi', salesReportRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

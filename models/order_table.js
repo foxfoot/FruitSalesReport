@@ -2,7 +2,7 @@ const dbConn = require('./db_conn');
 const Sequelize = require('sequelize');
 const fruitOrder_table = require('./fruitOrder_table');
 
-var order_table =  dbConn.define(
+let order_table =  dbConn.define(
     'order',
     {
         id : {
@@ -18,7 +18,7 @@ var order_table =  dbConn.define(
 );
 
 order_table.hasMany(fruitOrder_table);  // must put before the sync()
-//fruitOrder_table.belongsTo(order_table);
+//fruitOrder_table.hasOne(fruit_table, {foreignKey: 'fruit', targetKey: 'name'});  //??
 
 order_table.sync(/*{force : true}*/).then(()=>{
     console.log('order table sync succeed');
@@ -88,9 +88,37 @@ async function query(params){
 }
 
 
+async function generateSalesReport(params){
+    if(params === undefined){
+        console.log('order table generateSalesReport, the params is null');
+    }
+
+    let resOrders = {};
+
+    try{
+        resOrders.sumAmount = await order_table.sum('amount',{
+            include : fruitOrder_table/*,  //left join the fruitOrder table
+            where : params*/
+        });
+
+        resOrders.orderCnt = await order_table.count({
+            include : fruitOrder_table,
+            group : 'order.id'/*,  //left join the fruitOrder table
+            where : params*/
+        });
+
+
+    }catch(e){
+        console.log('failed to query the order table');
+    }
+
+    return resOrders;
+}
+
 
 module.exports = {
     add,
-    query
+    query,
+    generateSalesReport
 }
 

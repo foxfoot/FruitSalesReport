@@ -1,8 +1,4 @@
 const order_table = require('../../models/order_table');
-const fruit_table = require('../../models/fruit_table');
-
-//fruit_table.fruit_table.belongsToMany(order_table.order_table, {through : 'FruitOrder'});
-//order_table.order_table.belongsToMany(fruit_table.fruit_table, {through : 'FruitOrder'});
 
 async function add(params, res){
     console.log("orderHandler.add() + size=" + params.order.length);
