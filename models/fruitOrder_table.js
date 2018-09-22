@@ -5,7 +5,8 @@ const db_conn = require('./db_conn')
 var fruitOrder_table = db_conn.define('fruitOrder',
     {
         amount : Sequelize.BIGINT,
-        fruit : Sequelize.STRING(64)
+        fruit : Sequelize.STRING(64),
+        unitPrice : Sequelize.DECIMAL(10,2)
     },
     {  //options
        /* timestamp : true,

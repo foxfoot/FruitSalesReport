@@ -1,6 +1,7 @@
 const dbConn = require('./db_conn');
 const Sequelize = require('sequelize');
 const fruitOrder_table = require('./fruitOrder_table');
+const fruit_table = require('./fruit_table');
 
 let order_table =  dbConn.define(
     'order',
@@ -40,7 +41,7 @@ async function add(params){
         return false;
     }
 
-    const orderObj= {
+    const orderObj = {
         customer : params.customer
     }
 
@@ -52,7 +53,19 @@ async function add(params){
             if(!v.fruit || !v.amount){
                 throw Error('Incorrect in body parameters.');
             }
-            await oneOrder.createFruitOrder(v);  //createFruitOrder is added to order_table by "hasMany"
+            
+            const fruitArr = await fruit_table.query(v.fruit);
+            if(!fruitArr || fruitArr.length === 0){
+                throw Error('Cannot find the price of ' + v.fruit + '.');
+            }
+
+            const oneFruitOrder = {
+                fruit : v.fruit,
+                amount : v.amount,
+                unitPrice : fruitArr[0].price
+            };
+
+            await oneOrder.createFruitOrder(oneFruitOrder);  //createFruitOrder is added to order_table by "hasMany"
     
         });
 
@@ -93,26 +106,29 @@ async function generateSalesReport(params){
         console.log('order table generateSalesReport, the params is null');
     }
 
-    let resOrders = {};
+    let salesRes = {};
+
+    const rawQuery = "select  \
+        count(distinct `order`.`id`) as orderCnt, \
+        IFNULL(sum(`amount`), 0) as total_amount, \
+        IFNULL(sum(`amount`*`unitPrice`), 0) as total_price, \
+        '"+ params.start_date + "' as start_date, \
+        '"+ params.end_date + "' as end_date \
+        from `order` \
+        left join `fruitorder` on `order`.`id` = `fruitorder`.`orderId` \
+        where `order`.`createdAt` >= '" + params.start_date + " 00:00:00.000' \
+        and `order`.`createdAt` <= '" + params.end_date + " 23:59:59.999'";
 
     try{
-        resOrders.sumAmount = await order_table.sum('amount',{
-            include : fruitOrder_table/*,  //left join the fruitOrder table
-            where : params*/
-        });
+        salesRes = await dbConn.query(rawQuery, {type: dbConn.QueryTypes.SELECT});
 
-        resOrders.orderCnt = await order_table.count({
-            include : fruitOrder_table,
-            group : 'order.id'/*,  //left join the fruitOrder table
-            where : params*/
-        });
-
+        console.log('sales report: ' + JSON.stringify(salesRes));
 
     }catch(e){
-        console.log('failed to query the order table');
+        console.log('failed to query the order table. Error: ' + e);
     }
 
-    return resOrders;
+    return salesRes;
 }
 
 

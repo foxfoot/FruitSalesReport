@@ -45,10 +45,7 @@ async function query(name){
     console.log("query the DB, name:" + name);
     const qryObj = name === undefined ?  {} : {
         where : {
-            name : name,
-            '$not' : [
-                {'id' : null}
-            ]
+            name : name
         }
     };
     return await fruit_table.findAll(qryObj);

@@ -13,6 +13,9 @@ npm install mysql2
 
 npm install joi
 
+npm install joi-date-extensions
+
+
 add a json file with the mysql connection information
 
 models/connPasswd.json
