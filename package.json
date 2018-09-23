@@ -6,16 +6,21 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "chai": "^4.1.2",
+    "chai-http": "^4.2.0",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "express": "~4.16.0",
+    "firstline": "^2.0.2",
     "http-errors": "~1.6.2",
     "joi": "^13.6.0",
     "joi-date-extensions": "^1.2.0",
+    "mocha": "^5.2.0",
     "morgan": "~1.9.0",
     "mysql2": "^1.6.1",
     "node-cron": "^2.0.1",
     "pug": "2.0.0-beta11",
-    "sequelize": "^4.38.1"
+    "sequelize": "^4.38.1",
+    "supertest": "^3.3.0"
   }
 }

@@ -17,6 +17,16 @@ npm install joi-date-extensions
 
 npm install node-cron
 
-add a json file with the mysql connection information
+npm install firstline
+
+npm install mocha
+
+npm install chai
+
+npm install chai-http
+
+npm install supertest
+
+Add a json file with the mysql connection information
 
 models/connPasswd.json

@@ -3,13 +3,20 @@ const salesReportHandler = require('./webapi/salesReportHandler')
 const moment = require('moment');
 const order_table = require('../models/order_table');
 const cachedDailySalesReport_table = require('../models/cachedDailySalesReport_table');
+const firstline = require('firstline');
 
-const defaultCronConfig = '0,30 * * * * *'; 
+const testCronFileName = 'test/overridden_cron_job.config'
+const defaultCronConfig = '* * 3 * * *';   // Runn the cron job at 3:00 am every day
 
-let cronConfig = defaultCronConfig;
-
-module.exports = function(){
-    cron.schedule(cronConfig, async () => {
+function startCronJob(config){
+    if(typeof config !== 'string'){
+        console.warn("Enter startCronJob. The input parameter is not string, use the default value.")
+        config = defaultCronConfig;
+    }else{
+        console.log("Enter startCronJob. The configuration is " + config)
+    }
+    
+    cron.schedule(config, async () => {
         const now = moment().format('YYYY-MM-DD');
         console.log('running a task every 5 seconds. Current time is: ' + now);
 
@@ -37,4 +44,15 @@ module.exports = function(){
             console.error("Sales report cron job failed. Error: " + e);
         }
     });
+}
+
+module.exports = function(){
+    // Check if there is an overridden cron configuration file.
+    firstline(testCronFileName)
+        .then(startCronJob)
+        .catch(()=>{
+            console.debug("Unable to read the overrdden cron config. Use the default one.");
+            startCronJob(defaultCronConfig);
+        });
+        
 }
