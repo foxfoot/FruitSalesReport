@@ -1,6 +1,13 @@
 const order_table = require('../../models/order_table');
 const cachedDailySalesReport_table = require('../../models/cachedDailySalesReport_table');
 
+/**
+ * @function getSalesReport
+ * Get the sales report. Fetch the 
+ *
+ * @param params: Object, must include two properties: start_date, end_date which are string.
+ * @param res: Optional, the response message.
+ */
 async function getSalesReport(params, res){
     console.log("Enter getSalesReport");
     //1. Fetch the cache table
@@ -37,7 +44,9 @@ async function generateSalesReport(params, res){
             return false;
         }
     }catch(e){
-        res.status(500).send(e);
+        if(res){
+            res.status(500).send(e);
+        }
         return false;
     }
 }

@@ -6,25 +6,36 @@ const cachedDailySalesReport_table = require('../models/cachedDailySalesReport_t
 const firstline = require('firstline');
 
 const testCronFileName = 'test/overridden_cron_job.config'
+const testSubtractDay = 'test/subtractDay.config'
 const defaultCronConfig = '* * 3 * * *';   // Runn the cron job at 3:00 am every day
 
-function startCronJob(config){
+async function startCronJob(config){
     if(typeof config !== 'string'){
         console.warn("Enter startCronJob. The input parameter is not string, use the default value.")
         config = defaultCronConfig;
     }else{
         console.log("Enter startCronJob. The configuration is " + config)
     }
-    
+
+    let subDayInt = 1;// by default it is yesterday.
+    try{
+        const subtractDay = await firstline(testSubtractDay);
+        subDayInt = parseInt(subtractDay);
+        console.debug("Read the overrdden date. Use the value " + subDayInt);
+    }catch(e){
+        console.debug("Unable to read the overrdden date. Use the default one.");
+    }
+
     cron.schedule(config, async () => {
-        const now = moment().format('YYYY-MM-DD');
-        console.log('running a task every 5 seconds. Current time is: ' + now);
+        console.log("Enter the salesReportCronJob.");
+        const yesterday = moment().subtract(subDayInt, 'days').format('YYYY-MM-DD');
+        console.log("Yesterday is " + yesterday);
 
         try{
             // query the DB to get the "daily" report
             const todayReport = await order_table.generateSalesReport({
-                start_date : now.toString(),
-                end_date : now.toString(),
+                start_date : yesterday.toString(),
+                end_date : yesterday.toString(),
             });
 
             if(!todayReport){
