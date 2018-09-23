@@ -3,10 +3,11 @@ const cachedDailySalesReport_table = require('../../models/cachedDailySalesRepor
 
 /**
  * @function getSalesReport
- * Get the sales report. Fetch the 
+ * Get the sales report. Fetch the catched table first. If not found, call generateSalesReport()
  *
  * @param params: Object, must include two properties: start_date, end_date which are string.
  * @param res: Optional, the response message.
+ * @return true, if the report is got; false, if the report is not got
  */
 async function getSalesReport(params, res){
     console.log("Enter getSalesReport");
@@ -28,6 +29,14 @@ async function getSalesReport(params, res){
     return await generateSalesReport(params, res);
 }
 
+/**
+ * @function generateSalesReport
+ * Generate the sales report which may has multiple LEFT JOINs
+ *
+ * @param params: Object, must include two properties: start_date, end_date which are string.
+ * @param res: Optional, the response message.
+ * @return true, if the report is got; false, if the report is not got
+ */
 async function generateSalesReport(params, res){
     console.log("Enter generateSalesReport");
     try{

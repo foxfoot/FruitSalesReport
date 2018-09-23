@@ -5,10 +5,17 @@ const order_table = require('../models/order_table');
 const cachedDailySalesReport_table = require('../models/cachedDailySalesReport_table');
 const firstline = require('firstline');
 
-const testCronFileName = 'test/overridden_cron_job.config'
-const testSubtractDay = 'test/subtractDay.config'
+const testCronFileName = 'test/overridden_cron_job.config'; // for test
+const testSubtractDay = 'test/subtractDay.config';  // for test only
 const defaultCronConfig = '* * 3 * * *';   // Runn the cron job at 3:00 am every day
 
+/**
+ * @function startCronJob
+ * Start the cron job to generate the sales report everyday at 3:00 am.
+ *
+ * @param config: String, the cron job string like "* * * * * *".
+ * @return N/A
+ */
 async function startCronJob(config){
     if(typeof config !== 'string'){
         console.warn("Enter startCronJob. The input parameter is not string, use the default value.")
@@ -33,23 +40,23 @@ async function startCronJob(config){
 
         try{
             // query the DB to get the "daily" report
-            const todayReport = await order_table.generateSalesReport({
+            const yesterdayReport = await order_table.generateSalesReport({
                 start_date : yesterday.toString(),
                 end_date : yesterday.toString(),
             });
 
-            if(!todayReport){
+            if(!yesterdayReport){
                 console.error("Sales report cron job failed.");
                 return ;
             }
 
-            console.log("Sales report cron job succeeded. " + JSON.stringify(todayReport));
+            console.log("Sales report cron job succeeded. " + JSON.stringify(yesterdayReport));
 
             await cachedDailySalesReport_table.add({
-                date : todayReport.start_date,
-                order_count : todayReport.order_count,
-                total_amount : todayReport.total_amount,
-                total_price : todayReport.total_price
+                date : yesterdayReport.start_date,
+                order_count : yesterdayReport.order_count,
+                total_amount : yesterdayReport.total_amount,
+                total_price : yesterdayReport.total_price
             });
         }catch(e){
             console.error("Sales report cron job failed. Error: " + e);
