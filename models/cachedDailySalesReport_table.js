@@ -35,7 +35,7 @@ async function add(params){
             console.warn(__filename + " incorrect parameters.");
             return false;
     }
-    
+
     try{
         let oneRow = await cachedDailySalesReport_table.findOne({
             where : {
@@ -57,7 +57,32 @@ async function add(params){
     return false;
 }
 
-async function query(date){
+async function query(start_date, end_date){
+    if(start_date === undefined || end_date === undefined){
+        console.log('cachedDailySalesReport_table query, the params is null');
+    }
+
+    let salesRes = {};
+
+    const rawQuery = "select sum(`order_count`) as order_count, \
+                    sum(`total_amount`) as total_amount, \
+                    sum(`total_price`) as total_price, \
+                    '"+ start_date + "' as start_date, \
+                    '"+ end_date + "' as end_date \
+                    from `cachedDailySalesReport` \
+                    where `date` >= '" + start_date + " 00:00:00.000' \
+                    and `date` <= '" + end_date + " 23:59:59.999'";
+
+    try{
+        salesRes = await dbConn.query(rawQuery, {type: dbConn.QueryTypes.SELECT});
+
+        console.log('sales report: ' + JSON.stringify(salesRes));
+
+    }catch(e){
+        console.log('failed to query the order table. Error: ' + e);
+    }
+
+    return salesRes[0] || {};
 }
 
 module.exports = {

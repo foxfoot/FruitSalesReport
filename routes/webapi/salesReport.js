@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-//const Joi = require('joi');
 const BaseJoi = require('joi');
 const Extension = require('joi-date-extensions');
 const Joi = BaseJoi.extend(Extension);
@@ -19,7 +18,7 @@ router.get('/salesReport', async (req, res) =>{
         return;
     }
 
-    await salesReportHandler.generateSalesReport(req.query, res);
+    await salesReportHandler.getSalesReport(req.query, res);
 });
 
 module.exports = router;

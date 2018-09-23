@@ -128,7 +128,7 @@ async function generateSalesReport(params){
         console.log('failed to query the order table. Error: ' + e);
     }
 
-    return salesRes;
+    return salesRes[0] || {};
 }
 
 
