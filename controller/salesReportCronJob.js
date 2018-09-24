@@ -1,5 +1,4 @@
 const cron = require('node-cron');
-const salesReportHandler = require('./webapi/salesReportHandler')
 const moment = require('moment');
 const order_table = require('../models/order_table');
 const cachedDailySalesReport_table = require('../models/cachedDailySalesReport_table');
