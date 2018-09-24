@@ -2,6 +2,22 @@ const order_table = require('../../models/order_table');
 const cachedDailySalesReport_table = require('../../models/cachedDailySalesReport_table');
 
 /**
+ * @function getDateDifference
+ * Get the date difference.
+ *
+ * @param start_date: string, start date.
+ * @param end_date: string, end date.
+ * @return number, the date difference.
+ */
+function getDateDifference(start_date, end_date){
+    const start = new Date(start_date);
+    const end = new Date(end_date);
+    const diff = (end-start)/(24*3600*1000);
+    console.debug("Days diff is " + diff);
+    return diff;
+}
+
+/**
  * @function getSalesReport
  * Get the sales report. Fetch the catched table first. If not found, call generateSalesReport()
  *
@@ -11,10 +27,13 @@ const cachedDailySalesReport_table = require('../../models/cachedDailySalesRepor
  */
 async function getSalesReport(params, res){
     console.log("Enter getSalesReport");
+
     //1. Fetch the cache table
     try{
         const cachedResult = await cachedDailySalesReport_table.query(params.start_date, params.end_date);
-        if(cachedResult){
+        // check the days involved equal start date to end date
+        if(cachedResult && 
+            cachedResult.numOfDays === 1 + getDateDifference(params.start_date, params.end_date)){
             if(res){
                 res.status(200).send(cachedResult);
             }

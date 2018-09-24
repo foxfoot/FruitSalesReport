@@ -81,7 +81,8 @@ async function query(start_date, end_date){
 
     let salesRes = {};
 
-    const rawQuery = "select sum(`order_count`) as order_count, \
+    const rawQuery = "select count(*) as numberOfDays\
+                    sum(`order_count`) as order_count, \
                     sum(`total_amount`) as total_amount, \
                     sum(`total_price`) as total_price, \
                     '"+ start_date + "' as start_date, \
