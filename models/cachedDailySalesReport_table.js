@@ -89,7 +89,8 @@ async function query(start_date, end_date){
                     '"+ end_date + "' as end_date \
                     from `cachedDailySalesReport` \
                     where `date` >= '" + start_date + " 00:00:00.000' \
-                    and `date` <= '" + end_date + " 23:59:59.999'";
+                    and `date` <= '" + end_date + " 23:59:59.999'";  
+                    // TODO: 23:59:59 may not be correct. Needs to hanle the leap second
 
     try{
         salesRes = await dbConn.query(rawQuery, {type: dbConn.QueryTypes.SELECT});
