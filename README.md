@@ -3,32 +3,6 @@ A fruit sales report system. Use WebAPI to add/delete/modify/query fruit informa
 
 In order to avoid LEFT JOIN which is slow with > 1M records in both tables, use a cached table to store every day sales report. A cron job will be launched in the middle night (3 AM) to create yesterday's sales report.
 
-Install dependencies
-
-npm install express
-
-npm install express-generator
-
-npm install sequelize
-
-npm install mysql2
-
-npm install joi
-
-npm install joi-date-extensions
-
-npm install node-cron
-
-npm install firstline
-
-npm install mocha
-
-npm install chai
-
-npm install chai-http
-
-npm install supertest
-
 Add a json file with the mysql connection information
 
 models/connPasswd.json
